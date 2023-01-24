@@ -17,7 +17,7 @@ import SignupPage from "./src/screens/SignupPage";
 import DevicesScreen from "./src/iotapp/screens/DevicesScreen";
 import DevicesDRL1Screen from "./src/iotapp/screens/DeviceDRL1Screen";
 import { SocketContext, socket } from "./src/service/socket";
-
+import DevicesNavigator from "./src/iotapp/navigator/DevicesNavigator";
 
 export default function App() {
   const [isNavBarOpen, setIsNavBarOpen] = useState(false);
@@ -27,38 +27,26 @@ export default function App() {
     isNavBarOpen ? setIsNavBarOpen(false) : setIsNavBarOpen(true);
   };
 
-
-
-
   return (
     <NavigationContainer>
       <SocketContext.Provider value={socket}>
         <Stack.Navigator>
-        <Stack.Screen
+          <Stack.Screen
             name="Signup"
             component={SignupPage}
             options={{ title: "Registro" }}
           />
-          <Stack.Screen
-            name="DevicesScreen"
-            component={DevicesScreen}
-            options={{
-              title: "Dispositivos",
-              headerRight: () => (
-                <Button onPress={handleNavBar} title="Info" color="#fff" />
-              ),
-            }}
-          />
+
           <Stack.Screen
             name="LoginScreen"
             component={LoginPage}
             options={{ title: "Overview" }}
           />
-          
+
           <Stack.Screen
-            name="DeviceDRL1Screen"
-            component={DevicesDRL1Screen}
-            options={{ title: "DRL1" }}
+            name="DevicesNavigator"
+            component={DevicesNavigator}
+            options={{ title: "Overview" }}
           />
         </Stack.Navigator>
         <View

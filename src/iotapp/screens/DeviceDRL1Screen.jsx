@@ -1,22 +1,49 @@
 import { View, Text, Switch } from 'react-native'
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
 import { SocketContext } from '../../service/socket';
 import { useNavigation, Route } from '@react-navigation/native'; // <-- new code
+import { changeStateRelay } from '../../api/DRL1/DRL1';
+import { getDataStorage } from '../../storage/storage';
+import { getStateRelay } from '../../api/DRL1/DRL1';
 
 export default function DevicesDRL1Screen({route}) {
   const socket = useContext(SocketContext);
-  const {name} = route.params;
+  const {name, idDevice} = route.params;
   const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => {
+  const toggleSwitch = async () => {
     console.log(isEnabled);
-    let value = isEnabled ? '1' : '0';
+    let value = isEnabled ? '0' : '1';
+    setIsEnabled(previousState => !previousState);
+    const result = await changeStateRelay(value, idDevice);
+    console.log(result);
+    const token = await getDataStorage('USER_TOKEN');
+    console.log(token);
     socket.emit("USER:changeStateDRL1", {
       state: value,
-      tokenUser: '930d9bf891352d14b3c8863ba1c34e30eaae17fa6ee0173addbed42588c8',
-      idDeviceByUser: 1,
+      tokenUser: token,
+      idDevice: idDevice,
     });
-    setIsEnabled(previousState => !previousState);
+
+    
   }
+
+
+  useEffect(() => {
+    console.log(idDevice);
+    handleGetStateRelay();
+
+  
+  }, [])
+
+  const handleGetStateRelay = async () => {
+    const result = await getStateRelay(idDevice);
+    if(result.state == 'ok')
+    {
+      setIsEnabled(result.data.state == 0 ? false : true);
+    }
+    console.log(result);
+  }
+  
   
   return (
     <>

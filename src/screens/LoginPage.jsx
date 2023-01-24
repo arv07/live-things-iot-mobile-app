@@ -18,6 +18,8 @@ import FormNotification from "../components/utils/FormNotification";
 import Loader from "../components/utils/Loader";
 import { login, getUserInfo } from "../auth/auth";
 import { test } from "../auth/auth";
+import { storeDataStorage } from "../storage/storage";
+import DevicesNavigator from "../iotapp/navigator/DevicesNavigator";
 
 export default function LoginPage() {
   const navigation = useNavigation();
@@ -46,6 +48,7 @@ export default function LoginPage() {
     if(result.data.state == 'ok')
     {
       await storeAuthToken('AUTH_TOKEN', result.data.access_token);
+      await storeDataStorage('USER_TOKEN', result.data.user_token);
       setStateApi({
         ...stateApi,
         isSending: false,
@@ -71,7 +74,7 @@ export default function LoginPage() {
     console.log(result.data);
     if(result.data)
     {
-      navigation.navigate('DevicesScreen');
+      navigation.navigate('DevicesNavigator');
     }
   }
 

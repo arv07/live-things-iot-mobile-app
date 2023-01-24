@@ -2,13 +2,14 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { useNavigation, Route } from '@react-navigation/native'; // <-- new code
 
-export default function Card1({name, reference, idDevice}) {
+export default function Card1({name, reference, idDevice, isConnected}) {
     const navigation = useNavigation(); // <-- new code
 
     const event = () => {
         console.log("presionado");
         navigation.navigate('DeviceDRL1Screen', {
-          name: name
+          name: name,
+          idDevice: idDevice
         });
     }
   return (
@@ -26,10 +27,11 @@ export default function Card1({name, reference, idDevice}) {
             <Text>{reference}</Text>
           </View>
         </View>
-        <View className="absolute top-5 right-3  w-5 h-5 rounded-xl bg-green-primary">
+        <View className={`absolute top-5 right-3  w-5 h-5 rounded-xl ${isConnected ? 'bg-green-primary' : 'bg-gray-light-primary/80'}`}>
 
         </View>
-        <Text className="absolute bottom-0 right-0  mx-2 py-2">Conectado</Text>
+        
+        <Text className="absolute bottom-0 right-0  mx-2 py-2">{isConnected ? 'Conectado' : 'Desconectado'}</Text>
       </TouchableOpacity>
     </>
   );
