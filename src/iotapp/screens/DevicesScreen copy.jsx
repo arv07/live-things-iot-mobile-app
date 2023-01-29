@@ -5,7 +5,6 @@ import {
   ScrollView,
   StyleSheet,
   Button,
-  TouchableOpacity,
 } from "react-native";
 import React, { Component, useContext, useEffect, useState } from "react";
 import Header1 from "../../components/header/Header1";
@@ -15,22 +14,33 @@ import { getDevices } from "../../api/devices/devices";
 import { getDataStorage } from "../../storage/storage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
-import { Dimensions } from "react-native";
 
 export default function DevicesScreen({ route }) {
-  const screenHeight = Dimensions.get("window").height;
   const navigation = useNavigation();
   const socket = useContext(SocketContext);
+  const [token, setToken] = useState();
+  //const [deviceData, setDeviceData] = useState(route.params.data);
   const [deviceData, setDeviceData] = useState([]);
   const [devicesConnected, setDevicesConnected] = useState([]);
-  //console.log(route.params?.action);
+  //console.log(route.params);
+
   useEffect(() => {
     console.log("useEffect DevicesScreen");
+    console.log(route.params?.devices);
+    if (route.params?.devices) {
+      setDeviceData(route.params?.devices);
+      
+    }
     console.log("Linea 34:");
     console.log(route.params.data);
     setDeviceData(route.params.data);
     const jsonValue = JSON.stringify(route.params.data);
     AsyncStorage.setItem("DEVICES", jsonValue);
+    //console.log(route.params.data);
+    /* t = handleGetToken(); */
+    //handleGetDevices();
+    //handleGetToken();
+    handleToken();
 
     connectToSocket();
 
@@ -40,67 +50,95 @@ export default function DevicesScreen({ route }) {
       handleDevicesConnected(data.connected.devices);
     });
 
-    socket.on("connect", async () => {
+    socket.on("connect", () => {
       console.log("Socket ID: " + socket.id);
-      const result = await getDataStorage("USER_TOKEN");
+      //const token = localStorage.getItem("token");
       setTimeout(function () {
-        socket.emit("USER:getUsersConnected", {
-          userToken: result,
-        });
+        //const result = await getDataStorage('USER_TOKEN');
+        AsyncStorage.getItem("USER_TOKEN").then(
+          (value) =>
+            socket.emit("USER:getUsersConnected", {
+              userToken: value,
+            })
+          //setToken(value));
+        );
       }, 3000);
     });
 
     socket.on("DEVICE:newConnection", (data) => {
       console.log("Linea 79");
-      //console.log(data);
+      console.log(data);
+      let filtro = data.device;
+      filtro.connected = true;
       handleDevicesConnected([data.device]);
     });
   }, []);
 
-  //For getting data from the craeteDeviceModal
   useEffect(() => {
+    
     if (route.params?.devices) {
       setDeviceData(route.params?.devices);
-      (async () => {
-        const jsonValue = JSON.stringify(route.params?.devices);
-        await AsyncStorage.setItem("DEVICES", jsonValue);
-        const result = await AsyncStorage.getItem("USER_TOKEN");
-        socket.emit("USER:getUsersConnected", {
-          userToken: result,
-        });
-      })();
+      const jsonValue = JSON.stringify(route.params?.devices);
+      AsyncStorage.setItem("DEVICES", jsonValue);
+      AsyncStorage.getItem("USER_TOKEN").then(
+        (value) =>
+          socket.emit("USER:getUsersConnected", {
+            userToken: value,
+          })
+        //setToken(value));
+      );
     }
-  }, [route.params?.devices]);
+  }, [route.params?.devices])
+  
+
+  const handleToken = () =>
+    AsyncStorage.getItem("USER_TOKEN").then((value) => setToken(value));
 
   const connectToSocket = async () => {
     const result = await getDataStorage("USER_TOKEN");
     console.log("Linea 92:-----------");
+    //console.log(token);
     socket.auth = { token: result, userName: "Android" };
     socket.connect();
   };
 
-  //Compare devices from database against devices connected to socket
+  const handleGetDevices = async () => {
+    const result = await getDevices();
+    console.log(result.data);
+    result.data != ""
+      ? setDeviceData(result.data.data)
+      : setDeviceData([{ name: "no data" }]);
+    //console.log(result.data);
+  };
+
   const handleDevicesConnected = (devicesConnected) => {
     console.log("Linea 108:");
-    //console.log(deviceData);
+    console.log(deviceData);
 
-    AsyncStorage.getItem("DEVICES").then((value) => {
-      const devices = JSON.parse(value);
-      console.log("Linea 113:");
-      //console.log(devices);
-      const devicesConnectedUpdated = devices.map((device) => {
-        const connected = devicesConnected.some(
-          (d) => d.id_device == device.id_device
-        );
-        return { ...device, connected };
-      });
-      console.log("Linea 116");
-      //console.log(devicesConnectedUpdated);
-      setDeviceData(devicesConnectedUpdated);
-    });
+    AsyncStorage.getItem("DEVICES").then(
+      (value) =>{
+        const devices = JSON.parse(value);
+        console.log("Linea 113:");
+        console.log(devices);
+        const list = devices.map((device) => {
+          const connected = devicesConnected.some(
+            (d) => d.id_device == device.id_device
+          );
+          return { ...device, connected };
+        });
+        console.log("Linea 116");
+        console.log(list);
+        setDeviceData(list);
+      }
+      
+      //setToken(value));
+    );
+    
+    
   };
 
   const getConnected = () => {
+    //console.log(deviceData);
     AsyncStorage.getItem("USER_TOKEN").then(
       (value) =>
         socket.emit("USER:getUsersConnected", {
@@ -123,37 +161,21 @@ export default function DevicesScreen({ route }) {
 
   const getDeviceStorage = () => {
     AsyncStorage.getItem("DEVICES").then(
-      (value) => {
+      (value) =>{
         console.log(JSON.parse(value));
       }
-
+        
       //setToken(value));
     );
-  };
+  }
 
   return (
     <>
       <Header1 />
-      <TouchableOpacity
-        className="absolute top-24 right-4 flex w-10 justify-center items-center bg-yellow-primary rounded-md"
-        onPress={getConnected}
-      >
-        <Image
-          source={require("../../assets/img/refresh.png")}
-          style={{ width: 40, height: 40, resizeMode: "center" }}
-        />
-      </TouchableOpacity>
       {/* <View className="flex-1 items-center h-full w-full bg-gray-light-primary overflow-hidden pb-2" > */}
-      {/* <View className="flex-1 items-center h-full w-full bg-gray-light-primary overflow-hidden "> */}
       <ScrollView
-        //contentContainerStyle={styles.container}
-        contentContainerStyle={{
-          backgroundColor: "#F1F5F9",
-          //height:   500,
-       
-        }}
-        className=" px-1 mb-2"
-        //style={styles.aligment}
+        contentContainerStyle={styles.container}
+        style={styles.aligment}
         scrollEnabled={true}
       >
         {deviceData != "" ? (
@@ -161,10 +183,12 @@ export default function DevicesScreen({ route }) {
             return (
               <Card1
                 key={d.id_device}
+                name={d.name}
+                reference={d.reference}
+                idDevice={d.id_device}
                 isConnected={
                   d.hasOwnProperty("connected") ? d.connected : false
                 }
-                device={d}
               />
             );
           })
@@ -173,21 +197,14 @@ export default function DevicesScreen({ route }) {
         )}
 
         {/* <Button onPress={connectToSocket} title="Conectar" /> */}
-     {/*    <Button onPress={getConnected} title="Conectados" />
+        {/* <Button onPress={getConnected} title="Conectados" />
         <Button onPress={getState} title="Estado devices" />
         <Button onPress={getStorage} title="Get storage" />
-        <Button onPress={getStorage} title="Get storage" />
-        <Button onPress={getStorage} title="Get storage" />
-        <Button onPress={getStorage} title="Get storage" />
-        <Button onPress={getStorage} title="Get storage" />
-        <Button onPress={getStorage} title="Get storage" />
-        <Button onPress={getStorage} title="Get storage" />
-        <Button onPress={getStorage} title="Get storage" />
-        <Button onPress={getStorage} title="Get storage" /> */}
 
-        {/* <Button onPress={getDeviceStorage} title="Get device storage" /> */}
+        <Button onPress={getDeviceStorage} title="Get device storage" /> */}
+
       </ScrollView>
-      <View className="absolute bottom-5 right-5 w-20 h-20 bg-green-primary rounded-full shadow-green-primary shadow-2xl">
+      <View className="absolute bottom-5 right-5 w-20 h-20 bg-green-primary rounded-full">
         <Text
           className="absolute top-5 right-5 text-5xl text-white-primary px-2"
           onPress={() => navigation.navigate("CreateDeviceModal")}
@@ -195,8 +212,6 @@ export default function DevicesScreen({ route }) {
           +
         </Text>
       </View>
-
-      {/* </View> */}
     </>
   );
 }
@@ -204,17 +219,13 @@ export default function DevicesScreen({ route }) {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: 100,
-    backgroundColor: "#e67e22",
     //alignItems: 'center'
   },
 
   aligment: {
     paddingLeft: 5,
     paddingRight: 5,
-    //marginBottom: 800,
-    //width: "100%",
-    //height: "100%",
+    marginBottom: 5,
     //backgroundColor: 'red'
   },
 });

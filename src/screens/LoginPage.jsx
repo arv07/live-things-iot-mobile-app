@@ -100,8 +100,8 @@ export default function LoginPage() {
               value={formik.values.password}
               onChangeText={(text) => formik.setFieldValue("password", text)}
             />
-            <Text>{formik.errors.email}</Text>
-            <Text>{formik.errors.password}</Text>
+            <Text>{formik.errors.name}</Text>
+            <Text>{formik.errors.internal_code}</Text>
             {stateApi.isSending == true ? <Loader /> : ""}
             {stateApi.message != "" ? (
               <FormNotification

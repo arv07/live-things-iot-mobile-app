@@ -70,17 +70,18 @@ export async function login(data) {
   }
 }
 
-export async function getUserInfo() {
+export async function userIsAuthenticated() {
   try {
     //Api.defaults.withCredentials = true;
-    console.log(Api.defaults);
+    //console.log(Api.defaults);
     //console.log("Linea 41 ------------------");
     //console.log(data.email);
     //const result = await Api.get("api/userMobile/infouser", { headers: {Authorization : `Bearer 13|G3SH3DcrvQi8zHca2zm2umJcRaOy9oNthW8bYv9C`} });
     const result = await Api.get("api/user/isAuthenticated");
     return result;
   } catch (error) {
-    console.log(error);
+    return error.response;
+    console.log(error.response.status);
     /* if (error.message == "Network Error") {
         alert(error.message);
       }
