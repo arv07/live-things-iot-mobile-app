@@ -15,13 +15,12 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import LoginPage from "./src/screens/LoginPage";
 import SignupPage from "./src/screens/SignupPage";
-import DevicesScreen from "./src/iotapp/screens/DevicesScreen";
-import DevicesDRL1Screen from "./src/iotapp/screens/DeviceDRL1Screen";
 import { SocketContext, socket } from "./src/service/socket";
 import DevicesNavigator from "./src/iotapp/navigator/DevicesNavigator";
 import { userIsAuthenticated } from "./src/auth/auth";
 import { useNavigation } from "@react-navigation/native";
 import Header1 from "./src/components/header/Header1";
+import Loader from "./src/components/utils/Loader";
 
 export default function App() {
   //const navigation = useNavigation();
@@ -49,7 +48,7 @@ export default function App() {
       setIsAuthenticated(true);
       //navigation.navigate('LoginScreen');
     } else {
-      console.log("No autenticado");
+      console.log("No autenticado s");
       
     }
 
@@ -68,13 +67,19 @@ export default function App() {
             <Stack.Screen
               name="Signup"
               component={SignupPage}
-              options={{ title: "Registro" }}
+              options={{ 
+                title: "Registro", 
+                headerShown: false
+              }}
             />
 
             <Stack.Screen
               name="LoginScreen"
               component={LoginPage}
-              options={{ title: "Overview" }}
+              options={{ 
+                title: "Overview", 
+                headerShown: false
+              }}
             />
 
             <Stack.Screen
@@ -93,7 +98,10 @@ export default function App() {
     );
   } else {
     return(
-      <Header1/>
+      <View className="flex w-full h-full justify-center items-center">
+        <Loader/>
+      </View>
+      
     )
   }
 }

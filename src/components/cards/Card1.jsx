@@ -23,7 +23,7 @@ export default function Card1({ isConnected, device }) {
   return (
     <>
       <TouchableOpacity
-        className="relative w-full h-36 bg-yellow-primary  shadow-md rounded-md mt-2"
+        className="relative w-full h-36 bg-yellow-primary  shadow-md shadow-green-primary rounded-md mt-2"
         onPress={event}
       >
         <View className="flex flex-row items-center py-10 ml-5">

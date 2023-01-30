@@ -16,6 +16,7 @@ import { getDataStorage } from "../../storage/storage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { Dimensions } from "react-native";
+import { StatusBar } from "expo-status-bar";
 
 export default function DevicesScreen({ route }) {
   const screenHeight = Dimensions.get("window").height;
@@ -133,6 +134,9 @@ export default function DevicesScreen({ route }) {
 
   return (
     <>
+    <StatusBar
+    backgroundColor="#ecf0f1"
+    />
       <Header1 />
       <TouchableOpacity
         className="absolute top-24 right-4 flex w-10 justify-center items-center bg-yellow-primary rounded-md"
@@ -149,6 +153,7 @@ export default function DevicesScreen({ route }) {
         //contentContainerStyle={styles.container}
         contentContainerStyle={{
           backgroundColor: "#F1F5F9",
+          //backgroundColor: "#e74c3c",
           //height:   500,
        
         }}
@@ -187,7 +192,7 @@ export default function DevicesScreen({ route }) {
 
         {/* <Button onPress={getDeviceStorage} title="Get device storage" /> */}
       </ScrollView>
-      <View className="absolute bottom-5 right-5 w-20 h-20 bg-green-primary rounded-full shadow-green-primary shadow-2xl">
+      <View className="absolute bottom-5 right-5 w-20 h-20 bg-green-primary rounded-full  shadow-md shadow-green-primary">
         <Text
           className="absolute top-5 right-5 text-5xl text-white-primary px-2"
           onPress={() => navigation.navigate("CreateDeviceModal")}

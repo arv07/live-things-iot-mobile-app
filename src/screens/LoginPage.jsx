@@ -79,7 +79,7 @@ export default function LoginPage() {
   }
 
   return (
-    <View className="bg-green-primary w-full h-screen flex flex-col items-center justify-center">
+    <View className="bg-green-primary w-full h-full flex flex-col items-center justify-center">
       
         <View className=" bg-gray-light-primary w-11/12 h-auto rounded-md max-w-lg ">
           <View></View>
@@ -116,7 +116,7 @@ export default function LoginPage() {
               title="Registrarse"
               className="bg-yellow-primary w-11/12  h-14 my-5 rounded-md font-fw-thin text-xl "
             >
-              <Text className="text-center py-3 text-xl">Registrarse</Text>
+              <Text className="text-center py-3 text-xl">Ingresar</Text>
             </TouchableOpacity>
           </View>
           <Text onPress={getToken}>get token</Text>
