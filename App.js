@@ -12,51 +12,98 @@ import { TailwindProvider } from "tailwind-rn/dist";
 import utilities from "./tailwind.config";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
 import LoginPage from "./src/screens/LoginPage";
 import SignupPage from "./src/screens/SignupPage";
-import DevicesScreen from "./src/iotapp/screens/DevicesScreen";
-import DevicesDRL1Screen from "./src/iotapp/screens/DeviceDRL1Screen";
 import { SocketContext, socket } from "./src/service/socket";
 import DevicesNavigator from "./src/iotapp/navigator/DevicesNavigator";
+import { userIsAuthenticated } from "./src/auth/auth";
+import { useNavigation } from "@react-navigation/native";
+import Header1 from "./src/components/header/Header1";
+import Loader from "./src/components/utils/Loader";
 
 export default function App() {
-  const [isNavBarOpen, setIsNavBarOpen] = useState(false);
+  //const navigation = useNavigation();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  
   const Stack = createNativeStackNavigator();
 
   const handleNavBar = () => {
     isNavBarOpen ? setIsNavBarOpen(false) : setIsNavBarOpen(true);
   };
 
-  return (
-    <NavigationContainer>
-      <SocketContext.Provider value={socket}>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Signup"
-            component={SignupPage}
-            options={{ title: "Registro" }}
-          />
+  useEffect(() => {
+    handleUserIsAuthenticated();
+  }, []);
 
-          <Stack.Screen
-            name="LoginScreen"
-            component={LoginPage}
-            options={{ title: "Overview" }}
-          />
+  const handleUserIsAuthenticated = async () => {
+    const result = await userIsAuthenticated();
+    console.log(result.data);
+    /* if(result.status == 500)
+    {
+      setIsAuthenticated(false);
+    } */
+    if (result.data == 1) {
+      setIsAuthenticated(true);
+      //navigation.navigate('LoginScreen');
+    } else {
+      console.log("No autenticado s");
+      
+    }
 
-          <Stack.Screen
-            name="DevicesNavigator"
-            component={DevicesNavigator}
-            options={{ title: "Overview" }}
-          />
-        </Stack.Navigator>
-        <View
-          className={`top-20 right-0 bg-green-secundary w-11/12 h-52 ${
-            isNavBarOpen ? "absolute" : "hidden"
-          }`}
-        ></View>
-      </SocketContext.Provider>
-    </NavigationContainer>
-  );
+    setIsLoaded(true);
+  };
+
+  if (isLoaded) {
+    return (
+      <NavigationContainer>
+        <SocketContext.Provider value={socket}>
+          <Stack.Navigator
+            initialRouteName={
+              isAuthenticated ? "DevicesNavigator" : "LoginScreen"
+            }
+          >
+            <Stack.Screen
+              name="Signup"
+              component={SignupPage}
+              options={{ 
+                title: "Registro", 
+                headerShown: false
+              }}
+            />
+
+            <Stack.Screen
+              name="LoginScreen"
+              component={LoginPage}
+              options={{ 
+                title: "Overview", 
+                headerShown: false
+              }}
+            />
+
+            <Stack.Screen
+              name="DevicesNavigator"
+              component={DevicesNavigator}
+              screenOptions={{headerStyle: {backgroundColor: 'papayawhip'}}}
+              options={{ 
+                //title: "Dipositivos",
+                headerShown: false 
+              }}
+            />
+          </Stack.Navigator>
+          
+        </SocketContext.Provider>
+      </NavigationContainer>
+    );
+  } else {
+    return(
+      <View className="flex w-full h-full justify-center items-center">
+        <Loader/>
+      </View>
+      
+    )
+  }
 }
 
 /* const styles = StyleSheet.create({

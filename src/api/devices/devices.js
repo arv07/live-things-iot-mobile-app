@@ -30,11 +30,57 @@ Api.interceptors.request.use(
 export async function getDevices() {
     try {
       //Api.defaults.withCredentials = true;
-      console.log(Api.defaults);
+      //console.log(Api.defaults);
       //console.log("Linea 41 ------------------");
       //console.log(data.email);
       //const result = await Api.get("api/userMobile/infouser", { headers: {Authorization : `Bearer 13|G3SH3DcrvQi8zHca2zm2umJcRaOy9oNthW8bYv9C`} });
       const result = await Api.get("/api/device");
+      return result;
+    } catch (error) {
+      console.log(error);
+      /* if (error.message == "Network Error") {
+          alert(error.message);
+        }
+        else{
+          return error.response;
+        } */
+    }
+  }
+
+  export async function createDevice(data) {
+    try {
+      //Api.defaults.withCredentials = true;
+      //console.log(Api.defaults);
+      //console.log("Linea 41 ------------------");
+      //console.log(data.email);
+      //const result = await Api.get("api/userMobile/infouser", { headers: {Authorization : `Bearer 13|G3SH3DcrvQi8zHca2zm2umJcRaOy9oNthW8bYv9C`} });
+      const result = await Api.post("/api/device/store", {
+        name: data.name,
+        description: data.description,
+        location: data.location,
+        internal_code: data.internal_code
+      });
+      return result;
+    } catch (error) {
+      console.log(error);
+      /* if (error.message == "Network Error") {
+          alert(error.message);
+        }
+        else{
+          return error.response;
+        } */
+    }
+  }
+
+
+  export async function updateDevice(data, idDevice) {
+    try {
+      //console.log(data.email);
+      const result = await Api.post("api/device/update/"+idDevice, {
+        name: data.name,
+        description: data.description,
+        location: data.location,
+      });
       return result;
     } catch (error) {
       console.log(error);
