@@ -1,10 +1,10 @@
 import { View, Text, TextInput, ScrollView, StyleSheet } from "react-native";
 import React, { useState, useEffect } from "react";
-import Card2 from "../../components/cards/Card2";
+import Card2 from "../../../../components/cards/Card2";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-import ItemList2 from "../../components/itemList/ItemList2";
-import ItemList3 from "../../components/itemList/ItemList3";
+import ItemList2 from "../../../../components/itemList/ItemList2";
+import ItemList3 from "../../../../components/itemList/ItemList3";
 //import Clipboard from "@react-native-clipboard/clipboard";
 import * as Clipboard from 'expo-clipboard';
 

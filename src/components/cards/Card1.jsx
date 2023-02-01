@@ -13,9 +13,10 @@ export default function Card1({ isConnected, device }) {
           idDevice: idDevice
         });
     } */
-  const event = () => {
+  const event = (reference) => {
     console.log("presionado");
-    navigation.navigate("DRL1Navigation", {
+    console.log(reference);
+    navigation.navigate(`${reference}Navigation`, {
       device: device
     });
   };
@@ -24,7 +25,7 @@ export default function Card1({ isConnected, device }) {
     <>
       <TouchableOpacity
         className="relative w-full h-36 bg-yellow-primary  shadow-md shadow-green-primary rounded-md mt-2"
-        onPress={event}
+        onPress={() => event(device.reference)}
       >
         <View className="flex flex-row items-center py-10 ml-5">
           <Image

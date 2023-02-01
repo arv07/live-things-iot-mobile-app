@@ -4,12 +4,13 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createStackNavigator } from "@react-navigation/stack";
 import DevicesScreen from "../screens/DevicesScreen";
-import DevicesDRL1Screen from "../screens/DeviceDRL1Screen";
+import DevicesDRL1Screen from "../devices/DRL1/screens/DeviceDRL1Screen";
 import { getDevices } from "../../api/devices/devices";
 import CreateDeviceModal from "../devices/components/modal/CreateDeviceModal";
 import HamburgerMenu from "../../components/menu/HamburgerMenu";
 import DRL1Navigation from "../devices/DRL1/navigation/DRL1Navigation";
 import UpdateDeviceModal from "../devices/components/modal/UpdateDeviceModal";
+import DDA1Navigation from "../devices/DDA1/navigation/DDA1Navigation";
 
 export default function DevicesNavigator({ route }) {
   //const Stack = createNativeStackNavigator();
@@ -77,6 +78,14 @@ export default function DevicesNavigator({ route }) {
               name="DRL1Navigation"
               component={DRL1Navigation}
               options={{ title: "DRL1" }}
+            />
+            <Stack.Screen
+            name="DDA1Navigation"
+            component={DDA1Navigation}
+            options={{
+              title: 'DDA1'
+              //headerShown: false,
+            }}
             />
           </Stack.Group>
 
