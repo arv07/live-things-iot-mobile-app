@@ -1,10 +1,10 @@
 import { View, Text, Switch } from 'react-native'
 import React, {useState, useContext, useEffect} from 'react'
-import { SocketContext } from '../../service/socket';
+import { SocketContext } from '../../../../service/socket';
 import { useNavigation, Route } from '@react-navigation/native'; // <-- new code
-import { changeStateRelay } from '../../api/DRL1/DRL1';
-import { getDataStorage } from '../../storage/storage';
-import { getStateRelay } from '../../api/DRL1/DRL1';
+import { changeStateRelay } from '../../../../api/DRL1/DRL1';
+import { getDataStorage } from '../../../../storage/storage';
+import { getStateRelay } from '../../../../api/DRL1/DRL1';
 
 export default function DevicesDRL1Screen({route}) {
   const socket = useContext(SocketContext);

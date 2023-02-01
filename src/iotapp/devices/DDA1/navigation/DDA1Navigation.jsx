@@ -1,52 +1,46 @@
-import { View, Text, Image, StatusBar } from "react-native";
+import { View, Text, Image } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React, { useEffect, useState } from "react";
-import DevicesDRL1Screen from "../screens/DeviceDRL1Screen";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import EventsScreen from "../screens/EventsScreen";
-import DeviceInfoScreen from "../screens/DeviceInfoScreen";
-import UpdateDeviceModal from "../../components/modal/UpdateDeviceModal";
+import React from "react";
+import FingerprintUsersScreen from "../screens/FingerprintUsersScreen";
+import EventFingerprintUser from "../screens/EventFingerprintUser";
+import DeviceInfoScreen from "../../DRL1/screens/DeviceInfoScreen";
+import FloatingButton from "../../../../components/buttons/FloatingButton";
+import AddFingerprintUser from "../screens/AddFingerprintUser";
 
-export default function DRL1Navigation({ route }) {
+export default function DDA1Navigation({ route }) {
   const Tab = createBottomTabNavigator();
   const { device } = route.params;
-  useEffect(() => {
-    //console.log(route.params.name);
-  }, []);
-
   return (
     <>
       <Tab.Navigator
         screenOptions={{
-          tabBarStyle: { backgroundColor: "#001D3D"}, //blue dark
+          tabBarStyle: { backgroundColor: "#001D3D" }, //blue dark
           tabBarActiveTintColor: "#001D3D", //yellow
           tabBarInactiveTintColor: "#FFFFFF", //white
           tabBarActiveBackgroundColor: "#FFC300",
         }}
       >
         <Tab.Screen
-          name="DeviceDRL1Screen"
-          component={DevicesDRL1Screen}
+          name="FingerprintUsersScreen"
+          component={FingerprintUsersScreen}
           options={{
-            title: "Switch",
-            tabBarLabelPosition: "below-icon",
+            title: "Usuarios",
+            headerShown: false,
             tabBarIcon: () => (
               <Image
-                source={require("../../../../assets/icons/light-bulb-blue.png")}
+                source={require("../../../../assets/icons/users-blue.png")}
                 style={{ width: 40, height: 40, resizeMode: "center" }}
               />
             ),
-            //tabBarBadge: 'hola',
-            //tabBarBadgeStyle: {backgroundColor: '#9b59b6'},
-            headerShown: false,
           }}
           initialParams={{
-            device: device
+            device: device,
           }}
         />
+
         <Tab.Screen
-          name="EventsScreen"
-          component={EventsScreen}
+          name="EventFingerprintUser"
+          component={EventFingerprintUser}
           options={{
             title: "Eventos",
             headerShown: false,
@@ -58,9 +52,10 @@ export default function DRL1Navigation({ route }) {
             ),
           }}
           initialParams={{
-            device: device
+            device: device,
           }}
         />
+
         <Tab.Screen
           name="DeviceInfoScreen"
           component={DeviceInfoScreen}
@@ -75,25 +70,24 @@ export default function DRL1Navigation({ route }) {
             ),
           }}
           initialParams={{
-            device: device
+            device: device,
           }}
         />
-        {/* Hidden Screen */}
-        <Tab.Screen
-            name="UpdateDeviceModal"
-            component={UpdateDeviceModal}
+
+          <Tab.Screen
+            name="AddFingerprintUser"
+            component={AddFingerprintUser}
             options={{
-                title: 'Actualizar Dispositivo',
-                tabBarButton: () => null,
-                headerStyle: {backgroundColor: '#F1F5F9'}
-           
-            }}
-            
-      
-      
-        />
+              title: 'Agregar usuario',
+              tabBarButton: () => null,
+              headerStyle: {backgroundColor: '#F1F5F9'}
+         
+          }}
+          />
+
       </Tab.Navigator>
-      <StatusBar barStyle="light-content" backgroundColor="#001D3D" />
+      
+      
     </>
   );
 }

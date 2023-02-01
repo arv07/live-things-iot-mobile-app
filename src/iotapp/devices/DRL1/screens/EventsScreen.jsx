@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, StyleSheet } from "react-native";
 import React, { useState, useEffect } from "react";
-import ItemList1 from "../../../components/itemList/ItemList1";
-import { getEvents } from "../../../api/DRL1/DRL1";
+import ItemList1 from "../../../../components/itemList/ItemList1";
+import { getEvents } from "../../../../api/DRL1/DRL1";
 
 export default function EventsScreen({ route }) {
   const { device } = route.params;

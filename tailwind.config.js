@@ -8,6 +8,8 @@ module.exports = {
       'green-primary': '#001D3D',
       'blue-primary': '#3498db',
 
+      'icon-color': '#34495E',
+
       'red-primary': '#e74c3c',
       'green-secundary': '#2ecc71',
       'yellow-primary': '#FFC300'
