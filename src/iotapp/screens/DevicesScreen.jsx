@@ -23,8 +23,7 @@ export default function DevicesScreen({ route }) {
   const navigation = useNavigation();
   const socket = useContext(SocketContext);
   const [deviceData, setDeviceData] = useState([]);
-  const [devicesConnected, setDevicesConnected] = useState([]);
-  //console.log(route.params?.action);
+
   useEffect(() => {
     console.log("useEffect DevicesScreen");
     console.log("Linea 34:");

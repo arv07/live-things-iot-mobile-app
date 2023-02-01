@@ -3,9 +3,10 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
 import FingerprintUsersScreen from "../screens/FingerprintUsersScreen";
 import EventFingerprintUser from "../screens/EventFingerprintUser";
-import DeviceInfoScreen from "../../DRL1/screens/DeviceInfoScreen";
+import DeviceDRL1InfoScreen from "../../DRL1/screens/DeviceDRL1InfoScreen";
 import FloatingButton from "../../../../components/buttons/FloatingButton";
 import AddFingerprintUser from "../screens/AddFingerprintUser";
+import DeviceDDA1InfoScreen from "../screens/DeviceDDA1InfoScreen";
 
 export default function DDA1Navigation({ route }) {
   const Tab = createBottomTabNavigator();
@@ -57,8 +58,8 @@ export default function DDA1Navigation({ route }) {
         />
 
         <Tab.Screen
-          name="DeviceInfoScreen"
-          component={DeviceInfoScreen}
+          name="DeviceDDA1InfoScreen"
+          component={DeviceDDA1InfoScreen}
           options={{
             title: "Device",
             headerShown: false,
