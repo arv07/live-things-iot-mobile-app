@@ -1,4 +1,5 @@
 import { View, Text, Button, StatusBar, TouchableOpacity } from "react-native";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import React, { useState, useEffect, useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -14,14 +15,13 @@ import DDA1Navigation from "../devices/DDA1/navigation/DDA1Navigation";
 
 export default function DevicesNavigator({ route }) {
   //const Stack = createNativeStackNavigator();
-  
+  const Drawer = createDrawerNavigator();
   //console.log("Param Action:");
   //console.log(route.params?.action);
   const Stack = createStackNavigator();
   const [isNavBarOpen, setIsNavBarOpen] = useState(false);
   const [deviceData, setDeviceData] = useState([]);
   //console.log("Devices Navigator ----------------");
- 
 
   const handleNavBar = () => {
     isNavBarOpen ? setIsNavBarOpen(false) : setIsNavBarOpen(true);
@@ -59,7 +59,7 @@ export default function DevicesNavigator({ route }) {
               name="DevicesScreen"
               component={DevicesScreen}
               options={{
-                title: '',
+                title: "",
                 headerShown: true, //
                 headerTransparent: true,
                 headerRight: () => (
@@ -68,7 +68,6 @@ export default function DevicesNavigator({ route }) {
                   </TouchableOpacity>
                 ),
               }}
-              
               initialParams={{ data: deviceData }}
             />
             {/* <Stack.Screen
@@ -82,12 +81,12 @@ export default function DevicesNavigator({ route }) {
               options={{ title: "DRL1" }}
             />
             <Stack.Screen
-            name="DDA1Navigation"
-            component={DDA1Navigation}
-            options={{
-              title: 'DDA1'
-              //headerShown: false,
-            }}
+              name="DDA1Navigation"
+              component={DDA1Navigation}
+              options={{
+                title: "DDA1",
+                //headerShown: false,
+              }}
             />
           </Stack.Group>
 
@@ -113,6 +112,7 @@ export default function DevicesNavigator({ route }) {
             isNavBarOpen ? "absolute" : "hidden"
           }`}
         ></View>
+
       </>
     );
 }
