@@ -1,15 +1,62 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
   ScrollView,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from "react-native";
+import { SocketContext } from "../../../../service/socket";
 import DeviceInfo from "../../components/DeviceInfo";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function DeviceDDA1InfoScreen({ route }) {
   const { device } = route.params;
+  const socket = useContext(SocketContext);
+
+  useEffect(() => {
+    socket.on('USER:DeleteAllFingerprintUsers_r', (data) => {
+      alert("Se han borrado todos los usuarios: "+ data.message);
+    });
+  }, [])
+  
+
+  const deleteAllFingerprintUsers = () => {
+    console.log("Ejecutando metodo");
+    AsyncStorage.getItem("USER_TOKEN").then(
+      (value) =>
+        socket.emit("USER:DeleteAllFingerprintUsers", {
+          tokenUser: value,
+          idDevice: device.id_device,
+        })
+    );
+    
+  };
+
+  const handleDialogDeleteAllFingerprintUsers = () => {
+    Alert.alert(
+      "Borrar usuarios?",
+      "Esta seguro de borrar todos los usuarios del sensor de huellas?",
+      [
+        // The "Yes" button
+        {
+          text: "Yes",
+
+          onPress: () => {
+            deleteAllFingerprintUsers()
+          }
+        
+        },
+        // The "No" button
+        // Does nothing but dismiss the dialog when tapped
+        {
+          text: "No",
+        },
+      ]
+    );
+  
+  };
 
   return (
     <>
@@ -20,9 +67,14 @@ export default function DeviceDDA1InfoScreen({ route }) {
           scrollEnabled={true}
         >
           <DeviceInfo device={device} />
-          <View>
-            <Text>Nuevos datos</Text>
-          </View>
+          <TouchableOpacity
+            onPress={handleDialogDeleteAllFingerprintUsers}
+            className="flex justify-center items-center w-full h-10 bg-green-primary my-2"
+          >
+            <Text className="text-white-primary">
+              Eliminar todas las huellas
+            </Text>
+          </TouchableOpacity>
         </ScrollView>
       </View>
     </>
