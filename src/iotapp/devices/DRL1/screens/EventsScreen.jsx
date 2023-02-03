@@ -13,9 +13,8 @@ export default function EventsScreen({ route }) {
 
   const handleGetEvents = async () => {
     const result = await getEvents(device.id_device);
-    //console.log("Linea 17:");
-    //console.log(result);
-    setEventData(result.data);
+    result.data.length != 0 ? setEventData(result.data) : setEventData([{id_relay_event: 1, state: 0, created_at: 'Sin eventos'}]);
+    
   };
   return (
     <>

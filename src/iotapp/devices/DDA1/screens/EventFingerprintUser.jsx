@@ -13,7 +13,8 @@ export default function EventFingerprintUser({ route }) {
 
   const handleGetFingerprintEntries = async () => {
     const result = await getFingerprintEntries(device.id_device);
-    setEventData(result.data);
+    result.data.length != 0 ? setEventData(result.data) : setEventData([{id_fingerprint_entry: 1, name: 'Sin eventos', created_at: '--'}])
+    
   };
   return (
     <>

@@ -14,25 +14,27 @@ export default function DevicesDRL1Screen({route}) {
   const toggleSwitch = async () => {
     console.log(isEnabled);
     let value = isEnabled ? '0' : '1';
-    setIsEnabled(previousState => !previousState);
-    const result = await changeStateRelay(value, device.id_device);
-    console.log(result);
     const token = await getDataStorage('USER_TOKEN');
-    console.log(token);
     socket.emit("USER:changeStateDRL1", {
       state: value,
       tokenUser: token,
       idDevice: device.id_device,
     });
-
-    
+    setIsEnabled(previousState => !previousState);
+    const result = await changeStateRelay(value, device.id_device);
+    if(result.state == 'error')
+    {
+      setIsEnabled(previousState => !previousState);
+    }
+    //console.log(result);
+    //console.log(token);  
   }
 
 
   useEffect(() => {
-    console.log("Device Screen");
-    console.log(device.id_device);
-    console.log(device.name);
+    //console.log("Device Screen");
+    //console.log(device.id_device);
+    //console.log(device.name);
     handleGetStateRelay();
 
   

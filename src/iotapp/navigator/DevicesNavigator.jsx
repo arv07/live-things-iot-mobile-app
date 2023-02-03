@@ -14,11 +14,13 @@ import DDA1Navigation from "../devices/DDA1/navigation/DDA1Navigation";
 
 export default function DevicesNavigator({ route }) {
   //const Stack = createNativeStackNavigator();
-  //const {action} = route.params?;
+  
+  //console.log("Param Action:");
+  //console.log(route.params?.action);
   const Stack = createStackNavigator();
   const [isNavBarOpen, setIsNavBarOpen] = useState(false);
   const [deviceData, setDeviceData] = useState([]);
-  console.log("Devices Navigator ----------------");
+  //console.log("Devices Navigator ----------------");
  
 
   const handleNavBar = () => {
