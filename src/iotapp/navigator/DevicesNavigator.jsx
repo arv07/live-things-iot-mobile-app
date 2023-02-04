@@ -1,4 +1,4 @@
-import { View, Text, Button, StatusBar, TouchableOpacity } from "react-native";
+import { View, Text, Button, StatusBar, TouchableOpacity, Image } from "react-native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import React, { useState, useEffect, useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
@@ -12,6 +12,9 @@ import HamburgerMenu from "../../components/menu/HamburgerMenu";
 import DRL1Navigation from "../devices/DRL1/navigation/DRL1Navigation";
 import UpdateDeviceModal from "../devices/components/modal/UpdateDeviceModal";
 import DDA1Navigation from "../devices/DDA1/navigation/DDA1Navigation";
+import DropdownMenu from "../../components/menu/DropdownMenu";
+import NavBar1 from "../../components/nav/NavBar1";
+import { getAuthenticatedUser } from "../../auth/auth";
 
 export default function DevicesNavigator({ route }) {
   //const Stack = createNativeStackNavigator();
@@ -21,6 +24,7 @@ export default function DevicesNavigator({ route }) {
   const Stack = createStackNavigator();
   const [isNavBarOpen, setIsNavBarOpen] = useState(false);
   const [deviceData, setDeviceData] = useState([]);
+  const [userData, setUserData] = useState({name: '-', last_name: '-'});
   //console.log("Devices Navigator ----------------");
 
   const handleNavBar = () => {
@@ -30,6 +34,7 @@ export default function DevicesNavigator({ route }) {
   useEffect(() => {
     console.log("Use Effect Devices Navigator");
     handleGetDevices();
+    handleGetAuthenticatedUser();
   }, []);
 
   useEffect(() => {
@@ -45,11 +50,18 @@ export default function DevicesNavigator({ route }) {
   const handleGetDevices = async () => {
     const result = await getDevices();
     console.log(result.data);
+    console.log(result.data.length == 0);
     result.data != ""
       ? setDeviceData(result.data.data)
-      : setDeviceData([{ name: "no data" }]);
+      : setDeviceData([{ name: "no data", reference: 'No data' }]);
     //console.log(result.data);
   };
+
+  const handleGetAuthenticatedUser = async () => {
+    const result = await getAuthenticatedUser();
+    setUserData(result.data.data);
+  }
+
   if (deviceData.length != 0)
     return (
       <>
@@ -107,11 +119,17 @@ export default function DevicesNavigator({ route }) {
             />
           </Stack.Group>
         </Stack.Navigator>
-        <View
+
+        <NavBar1
+        isNavBarOpen={isNavBarOpen}
+        handleNavBar={handleNavBar}
+        userData={userData}
+        />
+        {/* <View
           className={`top-20 right-0 bg-green-secundary w-11/12 h-52 ${
             isNavBarOpen ? "absolute" : "hidden"
           }`}
-        ></View>
+        ></View> */}
 
       </>
     );

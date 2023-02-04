@@ -61,7 +61,7 @@ export default function DDA1Navigation({ route }) {
           name="DeviceDDA1InfoScreen"
           component={DeviceDDA1InfoScreen}
           options={{
-            title: "Device",
+            title: "Dispositivo",
             headerShown: false,
             tabBarIcon: () => (
               <Image

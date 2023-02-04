@@ -65,7 +65,7 @@ export default function DRL1Navigation({ route }) {
           name="DeviceInfoScreen"
           component={DeviceDRL1InfoScreen}
           options={{
-            title: "Device",
+            title: "Dispositivo",
             headerShown: false,
             tabBarIcon: () => (
               <Image

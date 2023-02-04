@@ -1,4 +1,4 @@
-import { View, Text, Button, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, Button, TextInput, TouchableOpacity, ScrollView } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -75,6 +75,7 @@ export default function CreateDeviceModal({ route }) {
   };
 
   return (
+    
     <View className="bg-gray-light-primary w-full h-screen flex flex-col items-center justify-start mt-10">
       <View className=" flex flex-col justify-items-start  w-full items-center justify-start ">
         <TextInput
