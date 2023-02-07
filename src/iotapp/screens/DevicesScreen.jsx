@@ -17,6 +17,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { Dimensions } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import Loader from "../../components/utils/Loader";
+import { DEVICE_TYPE_ICON } from "../../utils/constants";
 
 export default function DevicesScreen({ route }) {
   const screenHeight = Dimensions.get("window").height;
@@ -86,7 +88,7 @@ export default function DevicesScreen({ route }) {
 
     AsyncStorage.getItem("DEVICES").then((value) => {
       const devices = JSON.parse(value);
-      console.log("Linea 113:");
+      console.log("Liea 113:");
       //console.log(devices);
       const devicesConnectedUpdated = devices.map((device) => {
         const connected = devicesConnected.some(
@@ -131,11 +133,13 @@ export default function DevicesScreen({ route }) {
     );
   };
 
+  const dinamycIcon = () => {
+    console.log(DEVICE_TYPE_ICON["DRL1"]);
+  }
+
   return (
     <>
-    <StatusBar
-    backgroundColor="#ecf0f1"
-    />
+      <StatusBar backgroundColor="#ecf0f1" />
       <Header1 />
       <TouchableOpacity
         className="absolute top-24 right-4 flex w-10 justify-center items-center bg-yellow-primary rounded-md"
@@ -154,7 +158,6 @@ export default function DevicesScreen({ route }) {
           backgroundColor: "#F1F5F9",
           //backgroundColor: "#e74c3c",
           //height:   500,
-       
         }}
         className=" px-1 mb-2"
         //style={styles.aligment}
@@ -162,6 +165,14 @@ export default function DevicesScreen({ route }) {
       >
         {deviceData != "" ? (
           deviceData.map((d) => {
+            if (d.name == false) {
+              return (
+                <View className="flex justify-center items-center w-full mt-5">
+                  <Text className="text-2xl">Sin dispositivos</Text>
+                  <Text>Agrege un dispositivo para continuar</Text>
+                </View>
+              );
+            }
             return (
               <Card1
                 key={d.id_device}
@@ -173,11 +184,13 @@ export default function DevicesScreen({ route }) {
             );
           })
         ) : (
-          <Text>Cargando...</Text>
+          <View className="flex justify-center items-center h-full w-full bg-white-primary">
+            <Loader />
+          </View>
         )}
 
         {/* <Button onPress={connectToSocket} title="Conectar" /> */}
-     {/*    <Button onPress={getConnected} title="Conectados" />
+        {/*    <Button onPress={getConnected} title="Conectados" />
         <Button onPress={getState} title="Estado devices" />
         <Button onPress={getStorage} title="Get storage" />
         <Button onPress={getStorage} title="Get storage" />
@@ -189,16 +202,17 @@ export default function DevicesScreen({ route }) {
         <Button onPress={getStorage} title="Get storage" />
         <Button onPress={getStorage} title="Get storage" /> */}
 
-        {/* <Button onPress={getDeviceStorage} title="Get device storage" /> */}
+        {/* <Button onPress={dinamycIcon} title="Get device storage" /> */}
       </ScrollView>
-      <View className="absolute bottom-5 right-5 w-20 h-20 bg-green-primary rounded-full  shadow-md shadow-green-primary">
-        <Text
-          className="absolute top-5 right-5 text-5xl text-white-primary px-2"
-          onPress={() => navigation.navigate("CreateDeviceModal")}
-        >
+
+      <TouchableOpacity
+        onPress={() => navigation.navigate("CreateDeviceModal")}
+        className="absolute bottom-5 right-5 w-20 h-20 bg-green-primary rounded-full  shadow-md shadow-green-primary"
+      >
+        <Text className="absolute top-5 right-5 text-5xl text-white-primary px-2">
           +
         </Text>
-      </View>
+      </TouchableOpacity>
 
       {/* </View> */}
     </>

@@ -15,6 +15,7 @@ import DDA1Navigation from "../devices/DDA1/navigation/DDA1Navigation";
 import DropdownMenu from "../../components/menu/DropdownMenu";
 import NavBar1 from "../../components/nav/NavBar1";
 import { getAuthenticatedUser } from "../../auth/auth";
+import Loader from "../../components/utils/Loader";
 
 export default function DevicesNavigator({ route }) {
   //const Stack = createNativeStackNavigator();
@@ -49,17 +50,22 @@ export default function DevicesNavigator({ route }) {
 
   const handleGetDevices = async () => {
     const result = await getDevices();
+    console.log("Resultado get devcies ------------");
     console.log(result.data);
     console.log(result.data.length == 0);
-    result.data != ""
+    result.data.data.length != 0
       ? setDeviceData(result.data.data)
-      : setDeviceData([{ name: "no data", reference: 'No data' }]);
+      : setDeviceData([{ name: false, reference: 'no data' }]);
     //console.log(result.data);
   };
 
   const handleGetAuthenticatedUser = async () => {
     const result = await getAuthenticatedUser();
     setUserData(result.data.data);
+  }
+
+  const getState = () => {
+    console.log(deviceData);
   }
 
   if (deviceData.length != 0)
@@ -133,4 +139,12 @@ export default function DevicesNavigator({ route }) {
 
       </>
     );
+    else{
+      return(
+        <View className="flex justify-center items-center h-full w-full bg-white-primary">
+          <Loader/>
+        </View>
+        
+      )
+    }
 }

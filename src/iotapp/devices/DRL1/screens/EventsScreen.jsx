@@ -1,6 +1,7 @@
 import { View, Text, ScrollView, StyleSheet } from "react-native";
 import React, { useState, useEffect } from "react";
 import ItemList1 from "../../../../components/itemList/ItemList1";
+import Loader from "../../../../components/utils/Loader";
 import { getEvents } from "../../../../api/DRL1/DRL1";
 
 export default function EventsScreen({ route }) {
@@ -35,7 +36,9 @@ export default function EventsScreen({ route }) {
               );
             })
           ) : (
-            <Text>Cargando</Text>
+            <View className="flex justify-center items-center h-full w-full bg-gray-light-primary">
+            <Loader />
+          </View>
           )}
         </ScrollView>
       </View>

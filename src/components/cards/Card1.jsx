@@ -1,20 +1,14 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, Button } from "react-native";
 import React from "react";
 import { useNavigation, Route } from "@react-navigation/native"; // <-- new code
+import { DEVICE_TYPE_ICON } from "../../utils/constants";
 
 export default function Card1({ isConnected, device }) {
   const navigation = useNavigation(); // <-- new code
-  console.log("Linea 7:");
-  //console.log(infoDevice);
-  /* const event = () => {
-        console.log("presionado");
-        navigation.navigate('DeviceDRL1Screen', {
-          name: name,
-          idDevice: idDevice
-        });
-    } */
+  const img = DEVICE_TYPE_ICON[device.reference];
+
   const event = (reference) => {
-    console.log("presionado");
+    console.log("presionao");
     console.log(reference);
     navigation.navigate(`${reference}Navigation`, {
       device: device
@@ -29,8 +23,9 @@ export default function Card1({ isConnected, device }) {
       >
         <View className="flex flex-row items-center py-10 ml-5">
           <Image
-            source={require("../../assets/img/light-icon-black.png")}
-            style={{ width: 40, height: 40, resizeMode: "center" }}
+            //source={require('../../assets/img/light-icon-black.png')}
+            source={img}
+            style={{ width: 50, height: 50, resizeMode: "center" }}
           />
           <View>
             <Text className="text-2xl font-fw-regular">{device.name}</Text>
@@ -47,6 +42,7 @@ export default function Card1({ isConnected, device }) {
           {isConnected ? "Conectado" : "Desconectado"}
         </Text>
       </TouchableOpacity>
+
     </>
   );
 }
