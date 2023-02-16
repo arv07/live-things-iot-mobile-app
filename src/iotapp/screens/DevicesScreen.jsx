@@ -77,6 +77,7 @@ export default function DevicesScreen({ route }) {
   const connectToSocket = async () => {
     const result = await getDataStorage("USER_TOKEN");
     console.log("Linea 92:-----------");
+    console.log(result);
     socket.auth = { token: result, userName: "Android" };
     socket.connect();
   };

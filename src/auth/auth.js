@@ -57,10 +57,17 @@ export async function login(data) {
       password: data.password,
     });
 
-    return result;
+    return {result};
   } catch (error) {
+    return {error};
     if (error.response) {
       console.log("auth.js line  64");
+      
+    }
+    else{
+      //throw new Error('Unable to get a token.')
+      /* return  { result: { data: "error" } }; ;
+      alert(error); */
     }
     
 
@@ -92,6 +99,8 @@ export async function logout() {
       return { result: { data: "error" } };
     }
     else{
+      throw new Error('Unable to get a token.')
+      //return  "mensaje de error" ;
       alert(error);
     }
 
@@ -115,9 +124,11 @@ export async function userIsAuthenticated() {
       console.log("auth.sj Linea 87");
       console.log(error.message);
       
+      
       return { result: { data: "error" } };
     }
     else{
+      return { result: { data: "error" } };
       alert(error);
     }
 
@@ -154,6 +165,7 @@ export async function getAuthenticatedUser() {
       return { result: { data: "error" } };
     }
     else{
+      return { result: { data: "error" } };
       alert(error);
     }
 

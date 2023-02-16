@@ -1,13 +1,16 @@
 import { View, Text, TouchableOpacity, Alert } from "react-native";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useContext} from "react";
 import ItemList2 from "../../../components/itemList/ItemList2";
 import ItemList3 from "../../../components/itemList/ItemList3";
 import { useNavigation } from "@react-navigation/core";
 import * as Clipboard from "expo-clipboard";
 import { deleteDevice } from "../../../api/devices/devices";
+import { SocketContext } from "../../../service/socket";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function DeviceInfo({ device }) {
   const navigation = useNavigation();
+  const socket = useContext(SocketContext);
   const [redirect, setRedirect] = useState();
   const handleCopyToClipBoard = async () => {
     await Clipboard.setStringAsync(device.device_token);
@@ -17,9 +20,15 @@ export default function DeviceInfo({ device }) {
   useEffect(() => {
     const random = Math.floor(Math.random() * 100);
     setRedirect(random);
+
+    socket.on("USER:confirmResetWifiSetting", (data) => {
+      alert("Dispositivo reiniciado. Conectese a la red reconfig para continuar.")
+    });
     //console.log("Numero random");
     //console.log(random);
   }, [])
+
+  
   
 
   const handleDialogDeleteDevice = () => {
@@ -44,6 +53,29 @@ export default function DeviceInfo({ device }) {
     );
   };
 
+
+  const handleDialogReconfigWifi = () => {
+    Alert.alert(
+      "Reconfigurar Wifi?",
+      "Desea reconfigurar la red Wifi del dispositivo?",
+      [
+        // The "Yes" button
+        {
+          text: "Si",
+
+          onPress: () => {
+            handleReconfigWifi();
+          },
+        },
+        // The "No" button
+        // Does nothing but dismiss the dialog when tapped
+        {
+          text: "No",
+        },
+      ]
+    );
+  };
+
   const handleDeleteDevice = async () => {
     const result = await deleteDevice(device.id_device);
     if (result.data.state == "ok") {
@@ -54,6 +86,19 @@ export default function DeviceInfo({ device }) {
       
     }
   };
+
+  const handleReconfigWifi = async () => {
+    AsyncStorage.getItem("USER_TOKEN").then(
+      (value) =>
+        socket.emit("USER:resetWifiSetting", {
+          userToken: value,
+          idDevice: device.id_device
+        })
+      //setToken(value));
+    );
+
+    alert("Se envió el comando de reinicio, verifique que la red del dispositivo este disponible");
+  }
 
   return (
     <>
@@ -76,11 +121,20 @@ export default function DeviceInfo({ device }) {
         onPress={handleCopyToClipBoard}
       />
       <TouchableOpacity
+        onPress={handleDialogReconfigWifi}
+        className="flex justify-center items-center w-full h-10 bg-green-primary my-1"
+      >
+        <Text className="text-white-primary">Reconfigurar Wifi</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
         onPress={handleDialogDeleteDevice}
         className="flex justify-center items-center w-full h-10 bg-red-primary"
       >
         <Text className="text-white-primary">Eliminar dispositivo</Text>
       </TouchableOpacity>
+
+      
 
       <View className="absolute top-5 left-32 flex justify-center items-center w-full">
         <TouchableOpacity

@@ -61,6 +61,8 @@ export default function DevicesNavigator({ route }) {
 
   const handleGetAuthenticatedUser = async () => {
     const result = await getAuthenticatedUser();
+    console.log("Usuario autenticado ----------------");
+    console.log(result);
     setUserData(result.data.data);
   }
 

@@ -58,26 +58,31 @@ export default function LoginPage({ route }) {
   const handleLogin = async (formData) => {
     //console.log(formData);
     setStateApi({ ...stateApi, isSending: true });
-    const result = await login(formData);
-    //console.log(result.data);
-    if (result.data.state == "ok") {
-      await storeAuthToken("AUTH_TOKEN", result.data.access_token);
-      await storeDataStorage("USER_TOKEN", result.data.user_token);
-      setStateApi({
-        ...stateApi,
-        isSending: false,
-        message: result.data.message,
-        levelNotification: result.data.levelNotification,
-      });
-      navigation.navigate("DevicesNavigator");
-    } else {
-      setStateApi({
-        ...stateApi,
-        isSending: false,
-        message: result.data.message,
-        levelNotification: result.data.levelNotification,
-      });
-    }
+    
+      const {result, error} = await login(formData);
+      console.log("Resultado Login ----------------------");
+      console.log(result);
+      //if (result.data.state == "ok") {
+        if (result) {
+        await storeAuthToken("AUTH_TOKEN", result.data.access_token);
+        await storeDataStorage("USER_TOKEN", result.data.user_token);
+        setStateApi({
+          ...stateApi,
+          isSending: false,
+          message: result.data.message,
+          levelNotification: result.data.levelNotification,
+        });
+        navigation.navigate("DevicesNavigator");
+      } else {
+        alert(error);
+        /* setStateApi({
+          ...stateApi,
+          isSending: false,
+          message: result.data.message,
+          levelNotification: result.data.levelNotification,
+        }); */
+      }
+    
   };
 
   const getToken = async () => {
@@ -92,9 +97,9 @@ export default function LoginPage({ route }) {
 
   return (
     <ScrollView
-    contentContainerStyle={styles.container}
-        style={styles.aligment}
-        scrollEnabled={true}
+      contentContainerStyle={styles.container}
+      style={styles.aligment}
+      scrollEnabled={true}
     >
       <View className="bg-green-primary w-full h-full flex flex-col items-center justify-center">
         <View className=" bg-gray-light-primary w-11/12 h-auto rounded-md max-w-lg ">
@@ -170,7 +175,6 @@ function initialValues() {
   };
 }
 
-
 const styles = StyleSheet.create({
   container: {
     width: "100%",
@@ -187,4 +191,3 @@ const styles = StyleSheet.create({
     backgroundColor: "#001D3D",
   },
 });
-
