@@ -1,4 +1,5 @@
-import { View, Text, Button, StatusBar, TouchableOpacity } from "react-native";
+import { View, Text, Button, StatusBar, TouchableOpacity, Image } from "react-native";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import React, { useState, useEffect, useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -11,15 +12,21 @@ import HamburgerMenu from "../../components/menu/HamburgerMenu";
 import DRL1Navigation from "../devices/DRL1/navigation/DRL1Navigation";
 import UpdateDeviceModal from "../devices/components/modal/UpdateDeviceModal";
 import DDA1Navigation from "../devices/DDA1/navigation/DDA1Navigation";
+import DropdownMenu from "../../components/menu/DropdownMenu";
+import NavBar1 from "../../components/nav/NavBar1";
+import { getAuthenticatedUser } from "../../auth/auth";
+import Loader from "../../components/utils/Loader";
 
 export default function DevicesNavigator({ route }) {
   //const Stack = createNativeStackNavigator();
-  //const {action} = route.params?;
+  const Drawer = createDrawerNavigator();
+  //console.log("Param Action:");
+  //console.log(route.params?.action);
   const Stack = createStackNavigator();
   const [isNavBarOpen, setIsNavBarOpen] = useState(false);
   const [deviceData, setDeviceData] = useState([]);
-  console.log("Devices Navigator ----------------");
- 
+  const [userData, setUserData] = useState({name: '-', last_name: '-'});
+  //console.log("Devices Navigator ----------------");
 
   const handleNavBar = () => {
     isNavBarOpen ? setIsNavBarOpen(false) : setIsNavBarOpen(true);
@@ -28,6 +35,7 @@ export default function DevicesNavigator({ route }) {
   useEffect(() => {
     console.log("Use Effect Devices Navigator");
     handleGetDevices();
+    handleGetAuthenticatedUser();
   }, []);
 
   useEffect(() => {
@@ -42,12 +50,26 @@ export default function DevicesNavigator({ route }) {
 
   const handleGetDevices = async () => {
     const result = await getDevices();
+    console.log("Resultado get devcies ------------");
     console.log(result.data);
-    result.data != ""
+    console.log(result.data.length == 0);
+    result.data.data.length != 0
       ? setDeviceData(result.data.data)
-      : setDeviceData([{ name: "no data" }]);
+      : setDeviceData([{ name: false, reference: 'no data' }]);
     //console.log(result.data);
   };
+
+  const handleGetAuthenticatedUser = async () => {
+    const result = await getAuthenticatedUser();
+    console.log("Usuario autenticado ----------------");
+    console.log(result);
+    setUserData(result.data.data);
+  }
+
+  const getState = () => {
+    console.log(deviceData);
+  }
+
   if (deviceData.length != 0)
     return (
       <>
@@ -57,7 +79,7 @@ export default function DevicesNavigator({ route }) {
               name="DevicesScreen"
               component={DevicesScreen}
               options={{
-                title: '',
+                title: "",
                 headerShown: true, //
                 headerTransparent: true,
                 headerRight: () => (
@@ -66,7 +88,6 @@ export default function DevicesNavigator({ route }) {
                   </TouchableOpacity>
                 ),
               }}
-              
               initialParams={{ data: deviceData }}
             />
             {/* <Stack.Screen
@@ -80,12 +101,12 @@ export default function DevicesNavigator({ route }) {
               options={{ title: "DRL1" }}
             />
             <Stack.Screen
-            name="DDA1Navigation"
-            component={DDA1Navigation}
-            options={{
-              title: 'DDA1'
-              //headerShown: false,
-            }}
+              name="DDA1Navigation"
+              component={DDA1Navigation}
+              options={{
+                title: "DDA1",
+                //headerShown: false,
+              }}
             />
           </Stack.Group>
 
@@ -106,11 +127,26 @@ export default function DevicesNavigator({ route }) {
             />
           </Stack.Group>
         </Stack.Navigator>
-        <View
+
+        <NavBar1
+        isNavBarOpen={isNavBarOpen}
+        handleNavBar={handleNavBar}
+        userData={userData}
+        />
+        {/* <View
           className={`top-20 right-0 bg-green-secundary w-11/12 h-52 ${
             isNavBarOpen ? "absolute" : "hidden"
           }`}
-        ></View>
+        ></View> */}
+
       </>
     );
+    else{
+      return(
+        <View className="flex justify-center items-center h-full w-full bg-white-primary">
+          <Loader/>
+        </View>
+        
+      )
+    }
 }

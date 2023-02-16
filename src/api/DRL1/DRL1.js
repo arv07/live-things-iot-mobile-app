@@ -80,3 +80,41 @@ export async function changeStateRelay(state, idDevice) {
         } */
     }
   }
+
+
+
+  export async function changeStateMovementSensor(state, idDevice) {
+    try {
+      //console.log(data.email);
+      const result = await Api.post("api/movement/update/"+idDevice, {
+        state: state,
+      });
+      return result.data;
+    } catch (error) {
+      console.log(error);
+      /* if (error.message == "Network Error") {
+          alert(error.message);
+        }
+        else{
+          return error.response;
+        } */
+    }
+  }
+
+
+  export async function getStateMovementSensor(idDevice) {
+    try {
+      //console.log(data.email);
+      const result = await Api.get("api/movement/"+idDevice);
+      //console.log(result);
+      return result.data;
+    } catch (error) {
+      console.log(error);
+      /* if (error.message == "Network Error") {
+          alert(error.message);
+        }
+        else{
+          return error.response;
+        } */
+    }
+  }

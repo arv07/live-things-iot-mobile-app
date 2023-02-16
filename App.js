@@ -37,6 +37,8 @@ export default function App() {
     handleUserIsAuthenticated();
   }, []);
 
+
+
   const handleUserIsAuthenticated = async () => {
     const result = await userIsAuthenticated();
     console.log(result.data);

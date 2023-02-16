@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import DevicesDRL1Screen from "../screens/DeviceDRL1Screen";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import EventsScreen from "../screens/EventsScreen";
-import DeviceInfoScreen from "../screens/DeviceInfoScreen";
+import DeviceDRL1InfoScreen from "../screens/DeviceDRL1InfoScreen";
 import UpdateDeviceModal from "../../components/modal/UpdateDeviceModal";
 
 export default function DRL1Navigation({ route }) {
@@ -63,9 +63,9 @@ export default function DRL1Navigation({ route }) {
         />
         <Tab.Screen
           name="DeviceInfoScreen"
-          component={DeviceInfoScreen}
+          component={DeviceDRL1InfoScreen}
           options={{
-            title: "Device",
+            title: "Dispositivo",
             headerShown: false,
             tabBarIcon: () => (
               <Image

@@ -52,8 +52,19 @@ export default function FingerprintUsersScreen({ route }) {
 
   const handleGetFingerprintUsers = async () => {
     const result = await getFingerprintUsers(device.id_device);
-    setUsersData(result.data);
-    //console.log(result.data);
+    if(result.data.length != 0)
+    {
+      setUsersData(result.data);
+    }
+    else {
+      setUsersData([{
+        id_fingerprint_user: 1,
+        state: 'INACTIVE',
+        name: 'Sin usuarios'
+      }])
+    }
+    
+    console.log(result.data);
   };
 
   const getState = () => {

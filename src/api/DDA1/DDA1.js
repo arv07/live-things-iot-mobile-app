@@ -91,3 +91,21 @@ export async function getFingerprintUsers(idDevice) {
         } */
     }
   }
+
+
+  export async function getFingerprintEntries(idDevice) {
+    try {
+      //console.log(data.email);
+      const result = await Api.get("api/fingerprintEntry/"+idDevice);
+      return result.data;
+    } catch (error) {
+      console.log(error);
+      alert(error.message);
+      /* if (error.message == "Network Error") {
+          alert(error.message);
+        }
+        else{
+          return error.response;
+        } */
+    }
+  }
