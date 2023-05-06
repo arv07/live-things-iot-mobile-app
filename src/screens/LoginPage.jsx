@@ -58,12 +58,13 @@ export default function LoginPage({ route }) {
   const handleLogin = async (formData) => {
     //console.log(formData);
     setStateApi({ ...stateApi, isSending: true });
-    
-      const {result, error} = await login(formData);
-      console.log("Resultado Login ----------------------");
-      console.log(result);
-      //if (result.data.state == "ok") {
-        if (result) {
+
+    const { result, error } = await login(formData);
+    console.log("Resultado Login ----------------------");
+    console.log(result.data);
+    //if (result.data.state == "ok") {
+    if (result) {
+      if (result.data.levelNotification == 1) {
         await storeAuthToken("AUTH_TOKEN", result.data.access_token);
         await storeDataStorage("USER_TOKEN", result.data.user_token);
         setStateApi({
@@ -73,16 +74,24 @@ export default function LoginPage({ route }) {
           levelNotification: result.data.levelNotification,
         });
         navigation.navigate("DevicesNavigator");
-      } else {
-        alert(error);
-        /* setStateApi({
+      }
+      else{
+        setStateApi({
+          ...stateApi,
+          isSending: false,
+          message: result.data.message,
+          levelNotification: result.data.levelNotification,
+        });
+      }
+    } else {
+      alert(error);
+      /* setStateApi({
           ...stateApi,
           isSending: false,
           message: result.data.message,
           levelNotification: result.data.levelNotification,
         }); */
-      }
-    
+    }
   };
 
   const getToken = async () => {

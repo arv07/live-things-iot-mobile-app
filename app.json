@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "MobileApp",
-    "slug": "MobileApp",
+    "name": "Live Things Iot",
+    "slug": "live-things-iot",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -32,7 +32,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "6840388c-4391-4cac-b269-bd3bb788401f"
+        "projectId": "88abd009-bfb8-4ba3-ac2d-9d05f2749918"
       }
     }
   }

@@ -12,6 +12,7 @@ import HamburgerMenu from "../../components/menu/HamburgerMenu";
 import DRL1Navigation from "../devices/DRL1/navigation/DRL1Navigation";
 import UpdateDeviceModal from "../devices/components/modal/UpdateDeviceModal";
 import DDA1Navigation from "../devices/DDA1/navigation/DDA1Navigation";
+import TB1Navigation from "../devices/TB1/navigation/TB1Navigation";
 import DropdownMenu from "../../components/menu/DropdownMenu";
 import NavBar1 from "../../components/nav/NavBar1";
 import { getAuthenticatedUser } from "../../auth/auth";
@@ -105,6 +106,14 @@ export default function DevicesNavigator({ route }) {
               component={DDA1Navigation}
               options={{
                 title: "DDA1",
+                //headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="TB1Navigation"
+              component={TB1Navigation}
+              options={{
+                title: "TB1",
                 //headerShown: false,
               }}
             />
